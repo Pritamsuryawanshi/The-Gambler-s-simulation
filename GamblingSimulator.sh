@@ -2,13 +2,15 @@
 
 echo "Welcome to the gambler's simulation"
 
-#declaring a dictionary
+#declaring the dictionaries
 declare -A day
+declare -A result
 
-#VARIABLE
+#VARIABLES
 updatedAmount=0
+tempStake=0
 
-#CONSTANT
+#CONSTANTS
 BET=1
 STAKE=100
 MIN_STAKE_VALUE=$(( $STAKE * 50 / 100 ))
@@ -45,12 +47,13 @@ function dailyResult()
 		day[won]="${day[won]} $i"
 		wins=$(( tempStake - STAKE ))
 		updatedAmount=$(( updatedAmount + wins ))
-	elif (( tempStake == MIN_STAKE_VALUE ))
-		then
+	else
 		day[lost]="${day[lost]} $i"
 		loss=$(( STAKE - tempStake ))
 		updatedAmount=$((updatedAmount-loss))
 	fi
+	#Storing the days and the min and max amount it holds
+	result[$i]=$updatedAmount
 }
 
 #Function to check total amount remaining at the end of the month
@@ -64,6 +67,12 @@ function totalAmountRemaining()
 	fi
 	#reinstating the updated value to zero for next simulation
 	updatedAmount=0
+
+
+	echo "the luckiest day is"
+	luckyOrunlucky head
+	echo "the unluckiest day is"
+	luckyOrunlucky tail
 }
 
 #Function to check the days won and lost
@@ -74,6 +83,16 @@ function wonOrLost()
 		echo "days $i --> ${day[$i]}"
 	done
 }
+
+#Function to determine the luckiest and unluckiest day
+function luckyOrunlucky()
+{
+	for j in ${!result[@]}
+	do
+		echo "$j ${result[$j]}"
+	done | sort -k2 -rn | $1 -1
+}
+
 
 #MAIN
 read -p "press 1 to play: " choice
@@ -86,4 +105,5 @@ do
 	unset day[lost]
 done
 echo "GOODBYE!!"
+
 
