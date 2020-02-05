@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash 
 
-echo "Welcome to the gambler's simulation"
+echo "Welcome to the gambler's simulation "
 
 #declaring the dictionaries
 declare -A day
@@ -16,6 +16,7 @@ STAKE=100
 MIN_STAKE_VALUE=$(( $STAKE * 50 / 100 ))
 MAX_STAKE_VALUE=$(( $STAKE + $MIN_STAKE_VALUE ))
 MAX_GAMBLING_DAYS=20
+MAX_LOSING_AMOUNT=0
 
 #Function to Play till the  gambler either win 50 percent of the stake or lose
 function gambling()
@@ -50,7 +51,7 @@ function dailyResult()
 	else
 		day[lost]="${day[lost]} $i"
 		loss=$(( STAKE - tempStake ))
-		updatedAmount=$((updatedAmount-loss))
+		updatedAmount=$(( updatedAmount - loss ))
 	fi
 	#Storing the days and the min and max amount it holds
 	result[$i]=$updatedAmount
@@ -59,16 +60,12 @@ function dailyResult()
 #Function to check total amount remaining at the end of the month
 function totalAmountRemaining() 
 {
-	if (( updatedAmount>0 ))
+	if (( updatedAmount > MAX_LOSING_AMOUNT ))
 	then
 		echo "Amount won in a month is $updatedAmount"
 	else
 		echo "Amount lost in a month is $updatedAmount"
 	fi
-	#reinstating the updated value to zero for next simulation
-	updatedAmount=0
-
-
 	echo "the luckiest day is"
 	luckyOrunlucky head
 	echo "the unluckiest day is"
@@ -93,17 +90,26 @@ function luckyOrunlucky()
 	done | sort -k2 -rn | $1 -1
 }
 
+#reinstating the updated values to zero for next simulation
+function reinstate(){
+		updatedAmount=0
+		unset day[won]
+		unset day[lost]
+}
 
 #MAIN
 read -p "press 1 to play: " choice
 
-while ((choice==1))
+while (( choice==1 ))
 do
 	gambling
-	read -p "press 1 to play again: " choice
-	unset day[won]
-	unset day[lost]
+		if (( updatedAmount <= MAX_LOSING_AMOUNT ))
+		then
+			break
+		fi
+		read -p "You've won $updatedAmount$ last time...Would you like to play again, press 1: " choice
+		reinstate
 done
-echo "GOODBYE!!"
+echo "You've lost all the money...GOODBYE!!"
 
 
