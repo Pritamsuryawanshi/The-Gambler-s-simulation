@@ -102,7 +102,7 @@ read -p "press 1 to play: " choice
 
 while (( choice==1 ))
 do
-	gambling
+		gambling
 		if (( updatedAmount <= MAX_LOSING_AMOUNT ))
 		then
 			break
