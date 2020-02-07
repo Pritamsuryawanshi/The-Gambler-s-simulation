@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-echo "Welcome to the gambler's simulation "
+echo " Welcome to the gambler's simulation "
 
 #declaring the dictionaries
 declare -A day
@@ -36,7 +36,6 @@ function gambling()
 		done
 		dailyResult
 	done
-	wonOrLost
 	totalAmountRemaining
 }
 
