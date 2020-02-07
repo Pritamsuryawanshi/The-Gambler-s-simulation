@@ -72,15 +72,6 @@ function totalAmountRemaining()
 	luckyOrunlucky tail
 }
 
-#Function to check the days won and lost
-function wonOrLost()
-{
-	for i in ${!day[@]}
-	do
-		echo "days $i --> ${day[$i]}"
-	done
-}
-
 #Function to determine the luckiest and unluckiest day
 function luckyOrunlucky()
 {
@@ -92,9 +83,9 @@ function luckyOrunlucky()
 
 #reinstating the updated values to zero for next simulation
 function reinstate(){
-		updatedAmount=0
-		unset day[won]
-		unset day[lost]
+	updatedAmount=0
+	unset day[won]
+	unset day[lost]
 }
 
 #MAIN
